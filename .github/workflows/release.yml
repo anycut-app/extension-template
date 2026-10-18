@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the tag matches package.json
+        run: |
+          v=$(node -p "require('./package.json').version")
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "Tag $GITHUB_REF_NAME doesn't match package.json version $v"; exit 1; }
+      - name: Build the zip (package.json at its root)
+        run: |
+          name=$(node -p "require('./package.json').name")
+          v=$(node -p "require('./package.json').version")
+          zip -r "$name-$v.zip" . -x '.git/*' '.github/*' '*.zip' 'node_modules/.cache/*'
+          sha256sum "$name-$v.zip" | tee "$name-$v.zip.sha256"
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" *.zip *.zip.sha256 --title "$GITHUB_REF_NAME" --notes "SHA-256: $(cut -d' ' -f1 *.zip.sha256)"

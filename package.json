@@ -1,0 +1,27 @@
+{
+  "name": "my-extension",
+  "publisher": "yourname",
+  "displayName": "My Extension",
+  "description": "What it does, in one sentence.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": { "anycut": "^0.1.0" },
+  "icon": "media/icon.svg",
+  "main": "extension.mjs",
+  "categories": ["Other"],
+  "permissions": ["timeline.read"],
+  "contributes": {
+    "editors": [
+      { "id": "main", "title": "My Extension", "icon": "media/icon.svg", "webview": "ui/index.html", "timeline": "optional" }
+    ],
+    "commands": [{ "id": "hello", "title": "Say hello" }],
+    "tools": [
+      {
+        "name": "timeline_summary",
+        "readOnly": true,
+        "description": "Example tool: report the open sequence's name, length and playhead. Replace with your own.",
+        "inputSchema": { "type": "object", "properties": {} }
+      }
+    ]
+  }
+}
