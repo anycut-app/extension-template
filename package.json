@@ -9,6 +9,7 @@
   "bugs": "https://github.com/yourname/anycut-my-extension/issues",
   "engines": { "anycut": "^0.2.0" },
   "icon": "media/icon.svg",
+  "cover": "media/cover.png",
   "galleryBanner": { "color": "#1b1b1e", "theme": "dark" },
   "gallery": [],
   "main": "extension.mjs",

@@ -32,13 +32,16 @@ The tab decides its own layout. In `contributes.editors[]`:
 
 Each page can tell where it is from `anycut.context.surface` (`editor`, `properties`, `panel`, …). Pages load the first time they're shown, and keep running while hidden; `anycut.on('visibility', …)` tells you when.
 
-Your extension can also add sidebar views, its own Panel tabs on every sequence tab (`contributes.panels`), sections in the clip and media inspector (`contributes.inspector`), and entries in right-click menus (`contributes.menus`).
+Your extension gets one icon in the activity bar. Without a sidebar it opens your tab; add `contributes.sidebar` (`{ "webview": "ui/sidebar.html" }`) and it opens that page in the left sidebar instead, which stays while you switch tabs (a library, a list to work from), with a button to open your tab. You can also add Panel tabs on every sequence tab (`contributes.panels`), sections in the clip and media inspector (`contributes.inspector`), and entries in right-click menus (`contributes.menus`).
+
+Files people will want to keep, like downloads or renders, can go in their Downloads folder with the `downloads` permission (`anycut.downloads.*`): `Downloads\AnyCut\<your extension>`, which works with no project open.
 
 ## Your store page
 
 What AnyCut shows on the extension's page, before and after install:
 
-- `icon`: a square PNG or SVG.
+- `cover` (required to be listed): a 16:9 PNG or GIF, 1280×720 is ideal. It's your card in the Extensions view and the top of your page, so show the extension doing its job. Replace `media/cover.png`.
+- `icon`: a square PNG or SVG (the activity bar draws it in one colour).
 - `galleryBanner`: the header colour (`color`) and whether its text is light or dark (`theme`).
 - `gallery`: up to 10 screenshots or GIFs (`{ "path": "media/shot.png", "caption": "…" }`, 5 MB each). Show the extension doing its job, at the size AnyCut's window usually is. A short GIF of the main thing it does works best.
 - `README.md` (the Details tab) and `CHANGELOG.md` (the Changelog tab).

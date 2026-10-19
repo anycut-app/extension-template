@@ -32,7 +32,7 @@ jobs:
             const m = require("./package.json")
             const zip = `${m.name}-${m.version}.zip`
             const c = m.contributes ?? {}
-            const ui = ["editors", "views", "panels", "inspector", "menus", "tools", "commands"].some((k) => c[k]?.length)
+            const ui = c.sidebar || ["editors", "panels", "inspector", "menus", "tools", "commands"].some((k) => c[k]?.length)
             const content = ["effects", "fonts", "looks", "captionStyles", "skills"].some((k) => c[k])
             const entry = {
               id: `${m.publisher}.${m.name}`,
