@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Properties</title>
+  </head>
+  <body style="background: var(--panel); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+    <h3>Frame</h3>
+    <label style="display: flex; flex-direction: column; gap: 3px"
+      >Width
+      <select id="width">
+        <option value="640">640</option>
+        <option value="960" selected>960</option>
+        <option value="1920">1920</option>
+      </select>
+    </label>
+    <button id="grab">Grab frame</button>
+    <p class="muted" style="font-size: 11.5px">This is the tab's properties panel. It drives the main page with <code>anycut.tab.postMessage</code>.</p>
+    <script>
+      // anycut.context.surface is 'properties' here. getState/setState keep the choice across reloads.
+      const anycut = window.anycut
+      const select = document.getElementById('width')
+      const send = () => anycut.tab.postMessage({ type: 'width', width: Number(select.value) })
+
+      select.addEventListener('input', () => {
+        anycut.setState({ width: select.value })
+        send()
+      })
+      document.getElementById('grab').addEventListener('click', () => anycut.tab.postMessage({ type: 'grab' }))
+      anycut.tab.onMessage((m) => m?.type === 'hello' && send())
+
+      anycut.ready().then(() => {
+        const saved = anycut.getState()
+        if (saved?.width) select.value = saved.width
+        send()
+      })
+    </script>
+  </body>
+</html>

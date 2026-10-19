@@ -5,14 +5,27 @@
   "description": "What it does, in one sentence.",
   "version": "0.1.0",
   "license": "MIT",
-  "engines": { "anycut": "^0.1.0" },
+  "repository": "https://github.com/yourname/anycut-my-extension",
+  "bugs": "https://github.com/yourname/anycut-my-extension/issues",
+  "engines": { "anycut": "^0.2.0" },
   "icon": "media/icon.svg",
+  "galleryBanner": { "color": "#1b1b1e", "theme": "dark" },
+  "gallery": [],
   "main": "extension.mjs",
   "categories": ["Other"],
+  "keywords": [],
   "permissions": ["timeline.read"],
   "contributes": {
     "editors": [
-      { "id": "main", "title": "My Extension", "icon": "media/icon.svg", "webview": "ui/index.html", "timeline": "optional" }
+      {
+        "id": "main",
+        "title": "My Extension",
+        "icon": "media/icon.svg",
+        "webview": "ui/index.html",
+        "timeline": "optional",
+        "properties": { "webview": "ui/properties.html", "title": "My Extension" },
+        "panels": [{ "id": "activity", "title": "Activity", "webview": "ui/activity.html" }, "core:timeline"]
+      }
     ],
     "commands": [{ "id": "hello", "title": "Say hello" }],
     "tools": [

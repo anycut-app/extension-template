@@ -1,5 +1,8 @@
 name: Release
 
+# Push a tag matching package.json's version (git tag v0.1.0 && git push --tags) to build the zip,
+# attach it to a GitHub release, and print the entry to add to the catalog's index.json.
+
 on:
   push:
     tags: ['v*']
@@ -22,7 +25,34 @@ jobs:
           v=$(node -p "require('./package.json').version")
           zip -r "$name-$v.zip" . -x '.git/*' '.github/*' '*.zip' 'node_modules/.cache/*'
           sha256sum "$name-$v.zip" | tee "$name-$v.zip.sha256"
+      - name: Write the catalog entry
+        run: |
+          node -e '
+            const fs = require("fs")
+            const m = require("./package.json")
+            const zip = `${m.name}-${m.version}.zip`
+            const c = m.contributes ?? {}
+            const ui = ["editors", "views", "panels", "inspector", "menus", "tools", "commands"].some((k) => c[k]?.length)
+            const content = ["effects", "fonts", "looks", "captionStyles", "skills"].some((k) => c[k])
+            const entry = {
+              id: `${m.publisher}.${m.name}`,
+              repo: process.env.GITHUB_REPOSITORY,
+              version: m.version,
+              kind: !m.main && !ui && content ? "pack" : "tool",
+              download: `https://github.com/${process.env.GITHUB_REPOSITORY}/releases/download/${process.env.GITHUB_REF_NAME}/${zip}`,
+              sha256: fs.readFileSync(`${zip}.sha256`, "utf8").split(" ")[0],
+            }
+            const json = JSON.stringify(entry, null, 2)
+            fs.writeFileSync("notes.md", [
+              `SHA-256: \`${entry.sha256}\``,
+              "",
+              "To list this version in AnyCut, add (or update) this entry in [anycut-app/extensions](https://github.com/anycut-app/extensions/blob/main/index.json) in a pull request:",
+              "",
+              "```json", json, "```", "",
+            ].join("\n"))
+            console.log(json)
+          '
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" *.zip *.zip.sha256 --title "$GITHUB_REF_NAME" --notes "SHA-256: $(cut -d' ' -f1 *.zip.sha256)"
+        run: gh release create "$GITHUB_REF_NAME" *.zip *.zip.sha256 --title "$GITHUB_REF_NAME" --notes-file notes.md

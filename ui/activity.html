@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Activity</title>
+  </head>
+  <body style="background: var(--panel); padding: 8px 12px">
+    <ul id="list" class="mono" style="margin: 0; padding-left: 16px; font-size: 12px"></ul>
+    <p id="empty" class="muted">Nothing yet. Click "Ping my code" in the tab.</p>
+    <script>
+      // A tab in the Panel below, shown while this extension's tab is active. Your Node code sends it
+      // everything it does (anycut.webviews.postMessage to { viewId: 'activity' }).
+      const anycut = window.anycut
+      anycut.onMessage((m) => {
+        if (m?.type !== 'activity') return
+        const li = document.createElement('li')
+        li.textContent = `${m.at}  ${m.text}`
+        document.getElementById('list').prepend(li)
+        document.getElementById('empty').hidden = true
+      })
+    </script>
+  </body>
+</html>
