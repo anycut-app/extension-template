@@ -41,7 +41,7 @@ Files people will want to keep, like downloads or renders, can go in their Downl
 What AnyCut shows on the extension's page, before and after install:
 
 - `cover` (required to be listed): a 16:9 PNG or GIF, 1280×720 is ideal. It's your card in the Extensions view and the top of your page, so show the extension doing its job. Replace `media/cover.png`.
-- `icon`: a square PNG or SVG (the activity bar draws it in one colour).
+- `icon`: a square PNG or SVG; a colour picture is fine. The activity bar and tabs draw icons in one colour, so give your editor (and `sidebar`, if you have one) a single-colour glyph as their own `icon`.
 - `galleryBanner`: the header colour (`color`) and whether its text is light or dark (`theme`).
 - `gallery`: up to 10 screenshots or GIFs (`{ "path": "media/shot.png", "caption": "…" }`, 5 MB each). Show the extension doing its job, at the size AnyCut's window usually is. A short GIF of the main thing it does works best.
 - `README.md` (the Details tab) and `CHANGELOG.md` (the Changelog tab).
